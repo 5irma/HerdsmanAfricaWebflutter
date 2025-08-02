@@ -70,7 +70,7 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
 
           SizedBox(height: isMobile ? 40 : 60),
 
-          // Time estimate and CTA
+          // Bottom CTA
           _buildBottomCTA(context, isMobile),
         ],
       ),
@@ -81,7 +81,7 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
     return Column(
       children: [
         Text(
-          'Simple as 1-2-3',
+          'Complete Livestock Management',
           style: TextStyle(
             fontSize: isMobile ? 28 : 36,
             fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
         ),
         const SizedBox(height: 16),
         Text(
-          'Start tracking your herd in minutes, not hours',
+          'From EID tagging to marketplace trading - everything you need in one platform',
           style: TextStyle(
             fontSize: isMobile ? 16 : 18,
             color: AppColors.textSecondary,
@@ -144,39 +144,43 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
     final steps = [
       {
         'number': '1',
-        'title': 'Tag Your Animal',
+        'title': 'EID Tagging & Registration',
         'description':
-            'Scan ear tag or enter ID number. Takes 10 seconds per animal.',
-        'example': 'Example: Cow #247 gets a new ear tag',
-        'icon': Icons.qr_code_scanner,
-        'time': '10 sec',
+            'Tag animals by injecting microchip, scan and register on the app.',
+        'example':
+            'Example: Scan EID 982000123456789 to instantly access complete animal history',
+        'icon': Icons.nfc,
+        'badge': 'EID Compatible',
       },
       {
         'number': '2',
-        'title': 'Record What Happened',
+        'title': 'Simple Data Entry',
         'description':
-            'Log vaccination, breeding, health check - whatever you just did.',
-        'example': 'Example: "Gave vaccine to cow #247"',
+            'Record health treatments, breeding events, weight records, and daily observations with our friendly interphase.',
+        'example':
+            'Example: Log vaccination batch #V2024 for 50 cattle with automatic reminder scheduling',
         'icon': Icons.edit_note,
-        'time': '30 sec',
+        'badge': 'Quick Entry',
       },
       {
         'number': '3',
-        'title': 'Get Alerts',
+        'title': 'Production Monitoring',
         'description':
-            'We remind you when it\'s time for next vaccination or check-up.',
-        'example': 'Example: "Cow #247 due for booster in 2 weeks"',
-        'icon': Icons.notifications_active,
-        'time': 'Automatic',
+            'Keep track of milk production, weight over time and analyze trends with visual charts.',
+        'example':
+            'Example: "Average daily gain increased 12% this quarter, reproductive rate at 94%"',
+        'icon': Icons.analytics,
+        'badge': 'AI Insights',
       },
       {
         'number': '4',
-        'title': 'Track Health',
+        'title': 'Marketplace Trading',
         'description':
-            'See which animals need attention and when. No more guessing.',
-        'example': 'Example: Dashboard shows 3 cows need check-ups',
-        'icon': Icons.health_and_safety,
-        'time': 'Real-time',
+            'Buy and sell livestock directly through our integrated marketplace. All animals are verified and uniquely identified with Electronic ID hence transparent.',
+        'example':
+            'Example: List 20 steers for sale with complete health records and performance data',
+        'icon': Icons.storefront,
+        'badge': 'Secure Trading',
       },
     ];
 
@@ -207,7 +211,7 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
                     ? CrossAxisAlignment.center
                     : CrossAxisAlignment.start,
                 children: [
-                  // Step number and icon
+                  // Icon only
                   Row(
                     mainAxisAlignment: isMobile
                         ? MainAxisAlignment.center
@@ -220,61 +224,14 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
                           color: AppColors.primary,
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: Icon(
-                                step['icon'] as IconData,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ),
-                            Positioned(
-                              top: 4,
-                              right: 4,
-                              child: Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    step['number'] as String,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: Center(
+                          child: Icon(
+                            step['icon'] as IconData,
+                            color: Colors.white,
+                            size: 28,
+                          ),
                         ),
                       ),
-                      if (!isMobile) ...[
-                        const SizedBox(width: 16),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.accent.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            step['time'] as String,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        ),
-                      ],
                     ],
                   ),
 
@@ -303,63 +260,6 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
                     ),
                     textAlign: isMobile ? TextAlign.center : TextAlign.left,
                   ),
-
-                  const SizedBox(height: 16),
-
-                  // Example
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceVariant,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppColors.primary.withValues(alpha: 0.2),
-                        width: 1,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.lightbulb_outline,
-                          color: AppColors.primary,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            step['example'] as String,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textPrimary,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  if (isMobile) ...[
-                    const SizedBox(height: 16),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.accent.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        step['time'] as String,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),
@@ -386,10 +286,10 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.timer_outlined, color: AppColors.primary, size: 24),
+              Icon(Icons.trending_up, color: AppColors.primary, size: 24),
               const SizedBox(width: 12),
               Text(
-                'Complete setup in 15 minutes',
+                'A data driven farm maximizes every animals potential',
                 style: TextStyle(
                   fontSize: isMobile ? 18 : 20,
                   fontWeight: FontWeight.bold,
@@ -402,42 +302,13 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
           const SizedBox(height: 16),
 
           Text(
-            'Most farmers are tracking their first animal within 15 minutes of signing up',
+            'Sirma Kipkurui - CEO Herdsman Africa',
             style: TextStyle(
               fontSize: 16,
               color: AppColors.textSecondary,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: 24),
-
-          SizedBox(
-            width: isMobile ? double.infinity : 250,
-            height: 56,
-            child: ElevatedButton(
-              onPressed: () {
-                // Handle start tracking
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                elevation: 4,
-                shadowColor: AppColors.primary.withValues(alpha: 0.3),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'Start Tracking Now',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
           ),
         ],
       ),

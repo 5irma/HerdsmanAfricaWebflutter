@@ -201,7 +201,7 @@ class _DownloadAppSectionState extends State<DownloadAppSection>
       child: Column(
         children: [
           // Status bar
-          Container(
+          SizedBox(
             height: 20,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

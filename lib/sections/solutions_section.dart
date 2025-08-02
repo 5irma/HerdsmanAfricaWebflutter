@@ -115,13 +115,13 @@ class _SolutionsSectionState extends State<SolutionsSection>
     final solutions = [
       {
         'problem': 'Lost Paperwork & Forgotten Records',
-        'solution': 'Everything in Your Phone',
+        'solution': 'Farm data stored in cloud',
         'description':
             'No more digging through filing cabinets or trying to remember when you last vaccinated cow #247.',
         'benefits': [
-          'Save 2 hours daily on record-keeping',
-          'Never lose vaccination records again',
-          'Pass inspections with complete digital records',
+          'World-wide live data access',
+          'No loss of records',
+          'Trend analytics with use of infographics',
         ],
         'savings': 'Save \$3,200/year',
         'icon': Icons.description,
@@ -394,41 +394,6 @@ class _SolutionsSectionState extends State<SolutionsSection>
               ),
             );
           }).toList(),
-        ),
-
-        const SizedBox(height: 16),
-
-        // Savings highlight
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                AppColors.success.withValues(alpha: 0.1),
-                AppColors.success.withValues(alpha: 0.05),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: AppColors.success.withValues(alpha: 0.3),
-              width: 1,
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.savings, color: AppColors.success, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                solution['savings'] as String,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.success,
-                ),
-              ),
-            ],
-          ),
         ),
       ],
     );
