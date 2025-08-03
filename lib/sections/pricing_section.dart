@@ -13,6 +13,8 @@ class _PricingSectionState extends State<PricingSection>
   late List<AnimationController> _controllers;
   late List<Animation<double>> _animations;
   bool _showAnnual = true;
+  String _selectedAnimalCount = 'Up to 50 active animals';
+  bool _isDropdownOpen = false;
 
   @override
   void initState() {
@@ -73,16 +75,6 @@ class _PricingSectionState extends State<PricingSection>
 
           // Pricing cards
           isMobile ? _buildMobilePricing() : _buildDesktopPricing(),
-
-          SizedBox(height: isMobile ? 40 : 60),
-
-          // Value comparison
-          _buildValueComparison(isMobile),
-
-          SizedBox(height: isMobile ? 40 : 60),
-
-          // Guarantees and trust
-          _buildGuarantees(isMobile),
         ],
       ),
     );
@@ -128,7 +120,7 @@ class _PricingSectionState extends State<PricingSection>
               Icon(Icons.timer, color: AppColors.success, size: 20),
               const SizedBox(width: 8),
               Text(
-                '14-Day Free Trial • No Credit Card Required',
+                'Pay as you scale model',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -190,26 +182,299 @@ class _PricingSectionState extends State<PricingSection>
   }
 
   Widget _buildMobilePricing() {
-    return Column(
-      children: [
-        _buildPricingCard(0, true),
-        const SizedBox(height: 20),
-        _buildPricingCard(1, true),
-        const SizedBox(height: 20),
-        _buildPricingCard(2, true),
-      ],
-    );
+    return _buildSinglePricingCard(true);
   }
 
   Widget _buildDesktopPricing() {
-    return Row(
-      children: [
-        Expanded(child: _buildPricingCard(0, false)),
-        const SizedBox(width: 20),
-        Expanded(child: _buildPricingCard(1, false)),
-        const SizedBox(width: 20),
-        Expanded(child: _buildPricingCard(2, false)),
-      ],
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: _buildSinglePricingCard(false),
+      ),
+    );
+  }
+
+  Widget _buildSinglePricingCard(bool isMobile) {
+    final animalOptions = [
+      {'label': 'Up to 50 active animals', 'price': 8},
+      {'label': 'Up to 100 active animals', 'price': 15},
+      {'label': 'Up to 250 active animals', 'price': 35},
+      {'label': 'Up to 500 active animals', 'price': 65},
+      {'label': 'Up to 750 active animals', 'price': 95},
+      {'label': 'Up to 1000 active animals', 'price': 125},
+      {'label': 'More than 1000 active animals', 'price': null},
+    ];
+
+    final selectedOption = animalOptions.firstWhere(
+      (option) => option['label'] == _selectedAnimalCount,
+      orElse: () => animalOptions[0],
+    );
+
+    final features = [
+      'Complete cattle records',
+      'Pasture maps and records',
+      'Equipment inventory and maintenance',
+      'Income & Expense log',
+      'Calendar and Tasks',
+      'Unlimited Users',
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 30,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Top Features section
+          Text(
+            'Top Features',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 24),
+
+          // Features list
+          Column(
+            children: features.map((feature) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      color: AppColors.success,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        feature,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+
+          const SizedBox(height: 32),
+
+          // Animal count dropdown
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isDropdownOpen = !_isDropdownOpen;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.3),
+                  width: 2,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      _selectedAnimalCount,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      _isDropdownOpen
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Dropdown options
+          if (_isDropdownOpen) ...[
+            const SizedBox(height: 8),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.2),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: animalOptions.map((option) {
+                  final isSelected = option['label'] == _selectedAnimalCount;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedAnimalCount = option['label'] as String;
+                        _isDropdownOpen = false;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? AppColors.primary
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              option['label'] as String,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: isSelected
+                                    ? Colors.white
+                                    : AppColors.textPrimary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 32),
+
+          // Pricing section
+          Text(
+            'Pricing per account:',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 16),
+
+          // Price display
+          if (selectedOption['price'] != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '\$${selectedOption['price']}',
+                  style: TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    '/month billed yearly',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          else
+            Text(
+              'Contact us for custom pricing',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+
+          const SizedBox(height: 32),
+
+          // CTA Button
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: ElevatedButton(
+              onPressed: () {
+                // Handle plan selection
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 4,
+                shadowColor: AppColors.primary.withValues(alpha: 0.3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                selectedOption['price'] != null
+                    ? 'Start Free Trial'
+                    : 'Contact Sales',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

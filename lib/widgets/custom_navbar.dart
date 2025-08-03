@@ -16,8 +16,9 @@ class _CustomNavbarState extends State<CustomNavbar> {
 
   final List<NavItem> navItems = [
     NavItem('Home', () {}),
-    NavItem('Solutions', () {}),
     NavItem('How it works', () {}),
+    NavItem('Who it\'s for', () {}),
+    NavItem('Solutions', () {}),
     NavItem('Testimonials', () {}),
     NavItem('Pricing', () {}),
     NavItem('Download Mobile App', () {}),

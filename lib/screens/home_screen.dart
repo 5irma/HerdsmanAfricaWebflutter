@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_navbar.dart';
 import '../sections/hero_section.dart';
 import '../sections/how_it_works_section.dart';
+import '../sections/who_its_for_section.dart';
 import '../sections/solutions_section.dart';
 import '../sections/testimonials_section.dart';
 import '../sections/pricing_section.dart';
@@ -21,6 +22,7 @@ class HomeScreen extends StatelessWidget {
           children: const [
             HeroSection(),
             HowItWorksSection(),
+            WhoItsForSection(),
             SolutionsSection(),
             TestimonialsSection(),
             PricingSection(),

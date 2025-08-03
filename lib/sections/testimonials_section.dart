@@ -23,21 +23,6 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
       vsync: this,
     );
     _animationController.forward();
-
-    // Auto-scroll testimonials
-    Future.delayed(const Duration(seconds: 5), _autoScroll);
-  }
-
-  void _autoScroll() {
-    if (mounted) {
-      final nextIndex = (_currentIndex + 1) % testimonials.length;
-      _pageController.animateToPage(
-        nextIndex,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-      Future.delayed(const Duration(seconds: 5), _autoScroll);
-    }
   }
 
   @override
@@ -138,30 +123,6 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
         children: [
           // Section header
           _buildSectionHeader(context, isMobile),
-
-          SizedBox(height: isMobile ? 40 : 60),
-
-          // Main testimonial carousel
-          SizedBox(
-            height: isMobile ? 400 : 450,
-            child: PageView.builder(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              itemCount: testimonials.length,
-              itemBuilder: (context, index) {
-                return _buildMainTestimonial(testimonials[index], isMobile);
-              },
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Page indicators
-          _buildPageIndicators(),
 
           SizedBox(height: isMobile ? 40 : 60),
 
