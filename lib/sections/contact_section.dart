@@ -96,11 +96,6 @@ class _ContactSectionState extends State<ContactSection>
 
                 // Main content
                 isMobile ? _buildMobileLayout() : _buildDesktopLayout(),
-
-                SizedBox(height: isMobile ? 40 : 60),
-
-                // Emergency support
-                _buildEmergencySupport(isMobile),
               ],
             ),
           );
@@ -345,23 +340,20 @@ class _ContactSectionState extends State<ContactSection>
   }
 
   Widget _buildMobileLayout() {
-    return Column(
-      children: [
-        _buildBusinessInfo(true),
-        const SizedBox(height: 40),
-        _buildContactForm(true),
-      ],
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 600),
+        child: _buildContactForm(true),
+      ),
     );
   }
 
   Widget _buildDesktopLayout() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(flex: 4, child: _buildBusinessInfo(false)),
-        const SizedBox(width: 60),
-        Expanded(flex: 6, child: _buildContactForm(false)),
-      ],
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 800),
+        child: _buildContactForm(false),
+      ),
     );
   }
 

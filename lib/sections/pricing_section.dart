@@ -13,8 +13,9 @@ class _PricingSectionState extends State<PricingSection>
   late List<AnimationController> _controllers;
   late List<Animation<double>> _animations;
   bool _showAnnual = true;
-  String _selectedAnimalCount = 'Up to 50 active animals';
-  bool _isDropdownOpen = false;
+  final TextEditingController _animalCountController = TextEditingController(
+    text: '50',
+  );
 
   @override
   void initState() {
@@ -46,6 +47,7 @@ class _PricingSectionState extends State<PricingSection>
     for (var controller in _controllers) {
       controller.dispose();
     }
+    _animalCountController.dispose();
     super.dispose();
   }
 
@@ -195,20 +197,19 @@ class _PricingSectionState extends State<PricingSection>
   }
 
   Widget _buildSinglePricingCard(bool isMobile) {
-    final animalOptions = [
-      {'label': 'Up to 50 active animals', 'price': 8},
-      {'label': 'Up to 100 active animals', 'price': 15},
-      {'label': 'Up to 250 active animals', 'price': 35},
-      {'label': 'Up to 500 active animals', 'price': 65},
-      {'label': 'Up to 750 active animals', 'price': 95},
-      {'label': 'Up to 1000 active animals', 'price': 125},
-      {'label': 'More than 1000 active animals', 'price': null},
-    ];
+    // Price calculator: 10 KSh per animal per month
+    final pricePerAnimal = 10; // KSh per month
+    final usdRate = 130; // 1 USD = 130 KSh (approximate)
+    final annualDiscount = 0.20; // 20% discount for annual billing
 
-    final selectedOption = animalOptions.firstWhere(
-      (option) => option['label'] == _selectedAnimalCount,
-      orElse: () => animalOptions[0],
-    );
+    int animalCount = int.tryParse(_animalCountController.text) ?? 0;
+    int monthlyPriceKsh = animalCount * pricePerAnimal;
+    int annualPriceKsh = _showAnnual
+        ? (monthlyPriceKsh * 12 * (1 - annualDiscount)).round()
+        : monthlyPriceKsh * 12;
+
+    int displayPriceKsh = _showAnnual ? annualPriceKsh : monthlyPriceKsh;
+    double displayPriceUsd = displayPriceKsh / usdRate;
 
     final features = [
       'Complete cattle records',
@@ -278,116 +279,92 @@ class _PricingSectionState extends State<PricingSection>
 
           const SizedBox(height: 32),
 
-          // Animal count dropdown
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _isDropdownOpen = !_isDropdownOpen;
-              });
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
+          // Price Calculator
+          Text(
+            'Price Calculator',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 16),
+
+          Text(
+            'Enter the number of animals in your farm:',
+            style: TextStyle(fontSize: 16, color: AppColors.textSecondary),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 16),
+
+          // Animal count input field
+          TextFormField(
+            controller: _animalCountController,
+            keyboardType: TextInputType.number,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+            decoration: InputDecoration(
+              hintText: 'Enter number of animals',
+              hintStyle: TextStyle(
+                fontSize: 16,
+                color: AppColors.textSecondary,
+              ),
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
+                borderSide: BorderSide(
                   color: AppColors.primary.withValues(alpha: 0.3),
                   width: 2,
                 ),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _selectedAnimalCount,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      _isDropdownOpen
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ],
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: AppColors.primary,
+                  width: 2,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
               ),
             ),
+            onChanged: (value) {
+              setState(() {
+                // Trigger rebuild to update price
+              });
+            },
           ),
 
-          // Dropdown options
-          if (_isDropdownOpen) ...[
-            const SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: animalOptions.map((option) {
-                  final isSelected = option['label'] == _selectedAnimalCount;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedAnimalCount = option['label'] as String;
-                        _isDropdownOpen = false;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppColors.primary
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              option['label'] as String,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: isSelected
-                                    ? Colors.white
-                                    : AppColors.textPrimary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
+          const SizedBox(height: 16),
+
+          // Rate display
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.3),
+                width: 1,
               ),
             ),
-          ],
+            child: Text(
+              'Rate: KSh 10 per animal per month',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
 
           const SizedBox(height: 32),
 
@@ -405,39 +382,73 @@ class _PricingSectionState extends State<PricingSection>
           const SizedBox(height: 16),
 
           // Price display
-          if (selectedOption['price'] != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
+          if (animalCount > 0)
+            Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'KSh $displayPriceKsh',
+                      style: TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        _showAnnual ? '/year' : '/month',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
                 Text(
-                  '\$${selectedOption['price']}',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                  '(\$${displayPriceUsd.toStringAsFixed(2)} USD)',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColors.textSecondary,
+                    fontStyle: FontStyle.italic,
                   ),
                 ),
-                const SizedBox(width: 8),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Text(
-                    '/month billed yearly',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: AppColors.textSecondary,
+                if (_showAnnual && animalCount > 0) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.success.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'Save KSh ${(monthlyPriceKsh * 12 - annualPriceKsh)} per year (20% off)',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.success,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
             )
           else
             Text(
-              'Contact us for custom pricing',
+              'Enter number of animals to see pricing',
               style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -462,9 +473,7 @@ class _PricingSectionState extends State<PricingSection>
                 ),
               ),
               child: Text(
-                selectedOption['price'] != null
-                    ? 'Start Free Trial'
-                    : 'Contact Sales',
+                animalCount > 0 ? 'Start Free Trial' : 'Enter Animal Count',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -984,7 +993,7 @@ class _PricingSectionState extends State<PricingSection>
                 ),
               ),
               child: const Text(
-                'Start Your Free Trial',
+                'Get Started',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

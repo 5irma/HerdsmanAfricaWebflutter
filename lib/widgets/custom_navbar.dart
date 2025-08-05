@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
 
 class CustomNavbar extends StatefulWidget implements PreferredSizeWidget {
@@ -14,16 +15,16 @@ class CustomNavbar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomNavbarState extends State<CustomNavbar> {
   String? hoveredItem;
 
-  final List<NavItem> navItems = [
-    NavItem('Home', () {}),
-    NavItem('How it works', () {}),
-    NavItem('Who it\'s for', () {}),
-    NavItem('Solutions', () {}),
-    NavItem('Testimonials', () {}),
-    NavItem('Pricing', () {}),
-    NavItem('Download Mobile App', () {}),
-    NavItem('FAQs', () {}),
-    NavItem('Contacts', () {}),
+  List<NavItem> get navItems => [
+    NavItem('Home', () => context.go('/home')),
+    NavItem('How it works', () => context.go('/how-it-works')),
+    NavItem('Who it\'s for', () => context.go('/who-its-for')),
+    NavItem('Solutions', () => context.go('/solutions')),
+    NavItem('Testimonials', () => context.go('/testimonials')),
+    NavItem('Pricing', () => context.go('/pricing')),
+    NavItem('Download Mobile App', () => context.go('/download')),
+    NavItem('FAQs', () => context.go('/faqs')),
+    NavItem('Contacts', () => context.go('/contact')),
   ];
 
   @override
@@ -48,12 +49,12 @@ class _CustomNavbarState extends State<CustomNavbar> {
             // Logo section
             _buildLogo(context),
 
-            const SizedBox(width: 20),
+            const SizedBox(width: 16),
 
             // Navigation items
-            _buildNavigationItems(context),
+            Expanded(child: _buildNavigationItems(context)),
 
-            const SizedBox(width: 16),
+            const SizedBox(width: 12),
 
             // CTA buttons
             _buildCTAButtons(context),
@@ -67,9 +68,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {
-          // Navigate to home
-        },
+        onTap: () => context.go('/'),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -101,65 +100,61 @@ class _CustomNavbarState extends State<CustomNavbar> {
   }
 
   Widget _buildNavigationItems(BuildContext context) {
-    return Flexible(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: navItems.map((item) {
-            final isHovered = hoveredItem == item.title;
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: navItems.map((item) {
+          final isHovered = hoveredItem == item.title;
 
-            return MouseRegion(
-              cursor: SystemMouseCursors.click,
-              onEnter: (_) => setState(() => hoveredItem = item.title),
-              onExit: (_) => setState(() => hoveredItem = null),
-              child: TweenAnimationBuilder<Color?>(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                tween: ColorTween(
-                  begin: Colors.transparent,
-                  end: isHovered ? AppColors.hover : Colors.transparent,
-                ),
-                builder: (context, backgroundColor, child) {
-                  return TweenAnimationBuilder<Color?>(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    tween: ColorTween(
-                      begin: AppColors.textPrimary,
-                      end: isHovered
-                          ? AppColors.primary
-                          : AppColors.textPrimary,
-                    ),
-                    builder: (context, textColor, child) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 2),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: backgroundColor,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: GestureDetector(
-                          onTap: item.onTap,
-                          child: Text(
-                            item.title,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: textColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
-                                ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
+          return MouseRegion(
+            cursor: SystemMouseCursors.click,
+            onEnter: (_) => setState(() => hoveredItem = item.title),
+            onExit: (_) => setState(() => hoveredItem = null),
+            child: TweenAnimationBuilder<Color?>(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              tween: ColorTween(
+                begin: Colors.transparent,
+                end: isHovered ? AppColors.hover : Colors.transparent,
               ),
-            );
-          }).toList(),
-        ),
+              builder: (context, backgroundColor, child) {
+                return TweenAnimationBuilder<Color?>(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  tween: ColorTween(
+                    begin: AppColors.textPrimary,
+                    end: isHovered ? AppColors.primary : AppColors.textPrimary,
+                  ),
+                  builder: (context, textColor, child) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 1),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: GestureDetector(
+                        onTap: item.onTap,
+                        child: Text(
+                          item.title,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: textColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        }).toList(),
       ),
     );
   }

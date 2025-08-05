@@ -143,47 +143,47 @@ class _WhoItsForSectionState extends State<WhoItsForSection>
   Widget _buildTargetCard(int index, bool isMobile) {
     final targets = [
       {
-        'title': 'Small Family Farms',
-        'description':
-            'Perfect for farmers managing 10-100 animals who want to digitize their record-keeping and improve efficiency.',
+        'title': 'Meat Producers',
+        'description': '',
         'icon': Icons.home,
         'benefits': [
-          'Easy to learn and use',
-          'Affordable pricing',
-          'Essential tracking features',
+          'Weight Tracking',
+          'Select for Better Meat Quality',
+          'Meat Traceability',
+          'Breeding for Best Meat Traits',
         ],
       },
       {
-        'title': 'Growing Operations',
-        'description':
-            'Ideal for mid-size farms scaling up their operations and needing more advanced management tools.',
+        'title': 'Dairy Farmers',
+        'description': '',
         'icon': Icons.trending_up,
         'benefits': [
-          'Advanced analytics',
-          'Multi-user access',
-          'Breeding management',
+          'Track Milk Yields Per Animal',
+          'Breed for High Milk Productivity',
+          'Manage Lactation Cycles',
+          'Dairy Traceability',
         ],
       },
       {
-        'title': 'Commercial Ranches',
-        'description':
-            'Built for large operations managing hundreds or thousands of animals across multiple locations.',
+        'title': 'Breeders',
+        'description': '',
         'icon': Icons.business,
         'benefits': [
-          'Multi-location support',
-          'Custom integrations',
-          'Dedicated support',
+          'Precision Breeding Records',
+          'Data-Driven Decisions',
+          'Optimize Genetic Selection',
+          'Seamless Record Transfer to Buyers',
         ],
       },
       {
-        'title': 'Agricultural Consultants',
-        'description':
-            'Tools for consultants and veterinarians who work with multiple farms and need comprehensive oversight.',
+        'title': 'Powering Breeding Associations & Milk Cooperatives',
+        'description': '',
         'icon': Icons.people,
         'benefits': [
-          'Multi-farm management',
-          'Client reporting',
-          'Professional tools',
+          'Centralized Animal Records',
+          'Standardize Breeding Practices',
+          'Aggregate Milk & Weight Data',
+          'Financial Integration & Credit Access',
         ],
       },
     ];
@@ -261,35 +261,7 @@ class _WhoItsForSectionState extends State<WhoItsForSection>
                   const SizedBox(height: 16),
 
                   // Benefits
-                  Column(
-                    children: (target['benefits'] as List<String>).map((
-                      benefit,
-                    ) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle,
-                              color: AppColors.success,
-                              size: 16,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                benefit,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: AppColors.textPrimary,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                  Column(children: _buildBenefitsList(target, index)),
                 ],
               ),
             ),
@@ -297,6 +269,295 @@ class _WhoItsForSectionState extends State<WhoItsForSection>
         );
       },
     );
+  }
+
+  List<Widget> _buildBenefitsList(Map<String, dynamic> target, int index) {
+    // Special handling for Meat Producers section (index 0) with detailed descriptions
+    if (index == 0) {
+      final meatProducerBenefits = [
+        {
+          'title': 'Weight Tracking',
+          'description':
+              'Know optimal time to sell animals before they start eating into your profits.',
+        },
+        {
+          'title': 'Select for Better Meat Quality',
+          'description':
+              'Use breeding and growth data to prioritize animals with superior meat traits—fast growers, low fat, strong muscle tone.',
+        },
+        {
+          'title': 'Meat Traceability',
+          'description':
+              'Provide processors and consumers with transparent, verified traceability that meets regulatory and export standards.',
+        },
+        {
+          'title': 'Breeding for Best Meat Traits',
+          'description':
+              'Use data to selectively breed animals with desirable characteristics like faster growth, better feed efficiency, higher carcass yield, and leaner meat.',
+        },
+      ];
+
+      return meatProducerBenefits.map((benefit) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.check_circle, color: AppColors.success, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      benefit['title'] as String,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: Text(
+                  benefit['description'] as String,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList();
+    }
+
+    // Special handling for Dairy Farmers section (index 1) with detailed descriptions
+    if (index == 1) {
+      final dairyFarmerBenefits = [
+        {
+          'title': 'Track Milk Yields Per Animal',
+          'description':
+              'Record daily, weekly, or monthly milk output per cow, goat, or camel. Spot top performers and address low yielders early.',
+        },
+        {
+          'title': 'Breed for High Milk Productivity',
+          'description':
+              'Select animals with proven genetics for higher milk yield, longer lactation cycles, and disease resistance—generation after generation.',
+        },
+        {
+          'title': 'Manage Lactation Cycles',
+          'description':
+              'Monitor lactation phases, drying-off dates, and breeding windows to maintain consistent milk flow year-round.',
+        },
+        {
+          'title': 'Dairy Traceability',
+          'description':
+              'Maintain complete records from birth to milk production, including treatments and performance—crucial for milk quality assurance, buyer confidence, and regulatory compliance.',
+        },
+      ];
+
+      return dairyFarmerBenefits.map((benefit) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.check_circle, color: AppColors.success, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      benefit['title'] as String,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: Text(
+                  benefit['description'] as String,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList();
+    }
+
+    // Special handling for Breeders section (index 2) with detailed descriptions
+    if (index == 2) {
+      final breedingBenefits = [
+        {
+          'title': 'Precision Breeding Records',
+          'description':
+              'Track every animal\'s pedigree, birth history, and lineage with ease. Eliminate guesswork and breed with confidence.',
+        },
+        {
+          'title': 'Data-Driven Decisions',
+          'description':
+              'Access clear dashboards showing breeding performance, fertility trends, and calving intervals across your herd.',
+        },
+        {
+          'title': 'Optimize Genetic Selection',
+          'description':
+              'Use historical data to choose breeding pairs that enhance milk yield, growth rate, disease resistance, and more.',
+        },
+        {
+          'title': 'Seamless Record Transfer to Buyers',
+          'description':
+              'When selling an animal, instantly transfer its full digital record to the new owner—lineage, health, and performance—all in one click. Build trust and reputation as a transparent, professional breeder.',
+        },
+      ];
+
+      return breedingBenefits.map((benefit) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.check_circle, color: AppColors.success, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      benefit['title'] as String,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: Text(
+                  benefit['description'] as String,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList();
+    }
+
+    // Special handling for Breeding Associations & Milk Cooperatives section (index 3) with detailed descriptions
+    if (index == 3) {
+      final cooperativeBenefits = [
+        {
+          'title': 'Centralized Animal Records',
+          'description':
+              'Access structured, real-time data on every member\'s livestock—breed, health, productivity, and ownership—across the entire group.',
+        },
+        {
+          'title': 'Standardize Breeding Practices',
+          'description':
+              'Ensure members follow consistent, data-driven breeding protocols. Monitor lineage, control inbreeding, and preserve high-value genetics.',
+        },
+        {
+          'title': 'Aggregate Milk & Weight Data',
+          'description':
+              'View milk yields and weight gains across herds and regions. Benchmark performance, identify top-performing farms, and support lagging ones.',
+        },
+        {
+          'title': 'Financial Integration & Credit Access',
+          'description':
+              'Use verified herd data to support member loan applications, insurance, or subsidy programs with full animal records as collateral.',
+        },
+      ];
+
+      return cooperativeBenefits.map((benefit) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.check_circle, color: AppColors.success, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      benefit['title'] as String,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: Text(
+                  benefit['description'] as String,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList();
+    }
+
+    // Default benefits for other sections
+    return (target['benefits'] as List<String>).map((benefit) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Row(
+          children: [
+            Icon(Icons.check_circle, color: AppColors.success, size: 16),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                benefit,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }).toList();
   }
 
   Widget _buildBottomCTA(BuildContext context, bool isMobile) {

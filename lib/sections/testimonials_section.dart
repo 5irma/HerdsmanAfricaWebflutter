@@ -11,7 +11,7 @@ class TestimonialsSection extends StatefulWidget {
 class _TestimonialsSectionState extends State<TestimonialsSection>
     with TickerProviderStateMixin {
   late PageController _pageController;
-  int _currentIndex = 0;
+  final int _currentIndex = 0;
   late AnimationController _animationController;
 
   @override

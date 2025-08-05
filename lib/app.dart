@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'constants/app_colors.dart';
-import 'screens/home_screen.dart';
+import 'router/app_router.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Herdsman',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      routerConfig: AppRouter.router,
     );
   }
 }
