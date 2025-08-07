@@ -67,11 +67,6 @@ class _WhoItsForSectionState extends State<WhoItsForSection>
 
           // Target audience cards
           isMobile ? _buildMobileCards() : _buildDesktopCards(),
-
-          SizedBox(height: isMobile ? 40 : 60),
-
-          // Bottom CTA
-          _buildBottomCTA(context, isMobile),
         ],
       ),
     );

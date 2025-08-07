@@ -439,12 +439,6 @@ class _DownloadAppSectionState extends State<DownloadAppSection>
               'Changes sync instantly between your phone and desktop. No data loss.',
               isMobile,
             ),
-            _buildFeatureItem(
-              Icons.phone_android,
-              'Works on Older Phones',
-              'Runs smoothly on Android 6+ and iOS 12+. No need for latest devices.',
-              isMobile,
-            ),
           ],
         ),
       ],
@@ -608,62 +602,25 @@ class _DownloadAppSectionState extends State<DownloadAppSection>
   }
 
   Widget _buildAppCredibility(bool isMobile) {
-    return Column(
-      children: [
-        // App rating
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: List.generate(5, (index) {
-                return Icon(Icons.star, color: Colors.amber[300], size: 20);
-              }),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Download or visit website to view demo account and access market place. Contact us to register as a farmer for animal field verification.',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Colors.white.withValues(alpha: 0.9),
             ),
-            const SizedBox(width: 12),
-            Text(
-              '4.8/5 stars (2,500+ reviews)',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.white.withValues(alpha: 0.9),
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 16),
-
-        // Compatibility info
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
+            textAlign: TextAlign.center,
           ),
-          child: Column(
-            children: [
-              Text(
-                'Works on phones from 2017 and newer',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white.withValues(alpha: 0.9),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Android 6.0+ • iOS 12+ • 50MB download • Works offline',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.7),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

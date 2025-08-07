@@ -30,7 +30,6 @@ class _SolutionsSectionState extends State<SolutionsSection>
       ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
     }).toList();
 
-    // Start animations with stagger
     for (int i = 0; i < _controllers.length; i++) {
       Future.delayed(Duration(milliseconds: i * 200), () {
         if (mounted) _controllers[i].forward();
@@ -60,12 +59,8 @@ class _SolutionsSectionState extends State<SolutionsSection>
       ),
       child: Column(
         children: [
-          // Section header
           _buildSectionHeader(context, isMobile),
-
           SizedBox(height: isMobile ? 40 : 60),
-
-          // Solutions list
           Column(
             children: List.generate(5, (index) {
               return Padding(
@@ -74,10 +69,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
               );
             }),
           ),
-
           SizedBox(height: isMobile ? 40 : 60),
-
-          // Bottom CTA
           _buildBottomCTA(context, isMobile),
         ],
       ),
@@ -88,7 +80,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
     return Column(
       children: [
         Text(
-          'Stop the Daily Headaches',
+          'Built for Livestock Farmers',
           style: TextStyle(
             fontSize: isMobile ? 28 : 36,
             fontWeight: FontWeight.bold,
@@ -99,7 +91,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
         ),
         const SizedBox(height: 16),
         Text(
-          'We solve the 5 biggest problems that waste your time and money every day',
+          'Herdsman solves the top problems that slow down your livestock operation.',
           style: TextStyle(
             fontSize: isMobile ? 16 : 18,
             color: AppColors.textSecondary,
@@ -114,72 +106,72 @@ class _SolutionsSectionState extends State<SolutionsSection>
   Widget _buildSolutionCard(int index, bool isMobile) {
     final solutions = [
       {
-        'problem': 'Lost Paperwork & Forgotten Records',
-        'solution': 'Farm data stored in cloud',
+        'problem': 'Scattered Animal Records',
+        'solution': 'Centralized Digital Profiles',
         'description':
-            'No more digging through filing cabinets or trying to remember when you last vaccinated cow #247.',
+            'Stop flipping through notebooks. All animal data is stored safely in the cloud with instant access from any device.',
         'benefits': [
-          'World-wide live data access',
-          'No loss of records',
-          'Trend analytics with use of infographics',
+          'Access records anywhere, anytime',
+          'Secure cloud backup',
+          'No lost or damaged paper logs',
         ],
-        'savings': 'Save \$3,200/year',
+        'savings': 'Save 10+ hours/month on recordkeeping',
         'icon': Icons.description,
         'problemIcon': Icons.folder_off,
       },
       {
-        'problem': 'Missing Vaccination Deadlines',
-        'solution': 'Automatic Reminders',
+        'problem': 'Missed Vaccinations & Treatments',
+        'solution': 'Smart Notifications & Schedules',
         'description':
-            'Get alerts before vaccines expire. Never scramble to meet deadlines or pay late fees again.',
+            'Herdsman reminds you when animals are due for vaccines or medications so you never fall behind.',
         'benefits': [
-          'Prevent \$500+ fines per missed deadline',
-          'Automatic calendar reminders',
-          'Bulk vaccination scheduling',
+          'Automated reminders',
+          'Vet history tracking',
+          'Fewer missed treatments = healthier herds',
         ],
-        'savings': 'Avoid \$2,000/year in fines',
+        'savings': 'Reduce disease outbreaks by 70%',
         'icon': Icons.schedule,
         'problemIcon': Icons.warning,
       },
       {
-        'problem': 'Can\'t Find Sick Animals Fast',
-        'solution': 'Health Alerts & Tracking',
+        'problem': 'Blind Spots in Production Tracking',
+        'solution': 'Real-Time Production Monitoring',
         'description':
-            'Spot health issues early with tracking. Know exactly which animals need attention today.',
+            'Stop guessing. Track livestock output like milk, weight gain, and reproduction trends with precision.',
         'benefits': [
-          'Catch illness 3-5 days earlier',
-          'Reduce vet bills by 40%',
-          'GPS location tracking for large herds',
+          'Visual dashboards for key metrics',
+          'Improve feed-to-output efficiency',
+          'Identify underperforming animals early',
         ],
-        'savings': 'Save \$1,800/year on vet bills',
+        'savings': 'Maximize yields and reduce wastage by 30%',
         'icon': Icons.health_and_safety,
         'problemIcon': Icons.sick,
       },
       {
-        'problem': 'Breeding Records Are a Mess',
-        'solution': 'Smart Breeding Calendar',
+        'problem': 'Disorganized Breeding Info',
+        'solution': 'Automated Breeding Tracker',
         'description':
-            'Track breeding cycles, pregnancy status, and calving dates. Maximize your breeding success rate.',
+            'Know exactly when to breed, expected delivery dates, and keep genetic records—all in one place.',
         'benefits': [
-          'Increase conception rates by 15%',
-          'Never miss optimal breeding windows',
-          'Track genetics and lineage easily',
+          'Optimize breeding windows',
+          'Track pregnancy stages',
+          'Monitor sire and dam lineage',
         ],
-        'savings': 'Earn \$4,500/year more',
+        'savings': 'Boost conception rates by 20%',
         'icon': Icons.pets,
         'problemIcon': Icons.event_busy,
       },
       {
-        'problem': 'Inspector Visits Are Stressful',
-        'solution': 'Compliance Made Easy',
+        'problem': 'Untrusted Marketplace Transactions',
+        'solution': 'EID-Verified Fraud-Proof Marketplace',
         'description':
-            'Generate inspection reports instantly. All your records organized exactly how inspectors want them.',
+            'Every animal has a verified identity. Buyers and sellers transact confidently via the Herdsman marketplace.',
         'benefits': [
-          'Pass inspections in 15 minutes',
-          'Automatic compliance reports',
-          'USDA and state regulation ready',
+          'Electronic Identification and verification of animals',
+          'No fake listings',
+          'Trustworthy farm-to-farm sales',
         ],
-        'savings': 'Avoid \$5,000+ penalties',
+        'savings': 'Prevent losses from fraud and boost trade confidence',
         'icon': Icons.verified,
         'problemIcon': Icons.gavel,
       },
@@ -200,7 +192,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
                 color: index % 2 == 0 ? AppColors.background : Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.1),
+                  color: AppColors.primary.withOpacity(0.1),
                   width: 1,
                 ),
               ),
@@ -237,9 +229,9 @@ class _SolutionsSectionState extends State<SolutionsSection>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                AppColors.primary.withValues(alpha: 0.3),
+                AppColors.primary.withOpacity(0.3),
                 AppColors.primary,
-                AppColors.primary.withValues(alpha: 0.3),
+                AppColors.primary.withOpacity(0.3),
               ],
             ),
           ),
@@ -252,19 +244,17 @@ class _SolutionsSectionState extends State<SolutionsSection>
 
   Widget _buildProblemSection(Map<String, dynamic> solution, bool isMobile) {
     return Column(
-      crossAxisAlignment: isMobile
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: isMobile
-              ? MainAxisAlignment.center
-              : MainAxisAlignment.start,
+          mainAxisAlignment:
+              isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.1),
+                color: Colors.red.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -285,9 +275,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
             ),
           ],
         ),
-
         const SizedBox(height: 16),
-
         Text(
           solution['problem'] as String,
           style: TextStyle(
@@ -298,9 +286,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
           ),
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
         ),
-
         const SizedBox(height: 12),
-
         Text(
           solution['description'] as String,
           style: TextStyle(
@@ -316,19 +302,17 @@ class _SolutionsSectionState extends State<SolutionsSection>
 
   Widget _buildSolutionSection(Map<String, dynamic> solution, bool isMobile) {
     return Column(
-      crossAxisAlignment: isMobile
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: isMobile
-              ? MainAxisAlignment.center
-              : MainAxisAlignment.start,
+          mainAxisAlignment:
+              isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
+                color: AppColors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -349,9 +333,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
             ),
           ],
         ),
-
         const SizedBox(height: 16),
-
         Text(
           solution['solution'] as String,
           style: TextStyle(
@@ -362,14 +344,10 @@ class _SolutionsSectionState extends State<SolutionsSection>
           ),
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
         ),
-
         const SizedBox(height: 16),
-
-        // Benefits list
         Column(
-          crossAxisAlignment: isMobile
-              ? CrossAxisAlignment.center
-              : CrossAxisAlignment.start,
+          crossAxisAlignment:
+              isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
           children: (solution['benefits'] as List<String>).map((benefit) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
@@ -411,7 +389,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
       child: Column(
         children: [
           Text(
-            'Ready to Stop the Headaches?',
+            'Ready to Take Control of Your Farm?',
             style: TextStyle(
               fontSize: isMobile ? 24 : 28,
               fontWeight: FontWeight.bold,
@@ -419,21 +397,17 @@ class _SolutionsSectionState extends State<SolutionsSection>
             ),
             textAlign: TextAlign.center,
           ),
-
           const SizedBox(height: 16),
-
           Text(
-            'Join 2,500+ farmers who save 2+ hours daily and thousands in costs',
+            'Join farmers across Africa using Herdsman to save time, reduce losses, and boost profits.',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white.withValues(alpha: 0.9),
+              color: Colors.white.withOpacity(0.9),
               height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
-
           const SizedBox(height: 24),
-
           SizedBox(
             width: isMobile ? double.infinity : 250,
             height: 56,
@@ -445,7 +419,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
                 backgroundColor: Colors.white,
                 foregroundColor: AppColors.primary,
                 elevation: 4,
-                shadowColor: Colors.black.withValues(alpha: 0.2),
+                shadowColor: Colors.black.withOpacity(0.2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

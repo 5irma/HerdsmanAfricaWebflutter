@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
@@ -11,8 +12,9 @@ class TestimonialsSection extends StatefulWidget {
 class _TestimonialsSectionState extends State<TestimonialsSection>
     with TickerProviderStateMixin {
   late PageController _pageController;
-  final int _currentIndex = 0;
+  int _currentIndex = 0;
   late AnimationController _animationController;
+  late Timer _autoScrollTimer;
 
   @override
   void initState() {
@@ -23,10 +25,29 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
       vsync: this,
     );
     _animationController.forward();
+
+    // Start auto-scroll timer
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    _autoScrollTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_pageController.hasClients) {
+        setState(() {
+          _currentIndex = (_currentIndex + 1) % testimonials.length;
+        });
+        _pageController.animateToPage(
+          _currentIndex,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
+    _autoScrollTimer.cancel();
     _pageController.dispose();
     _animationController.dispose();
     super.dispose();
@@ -126,8 +147,13 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
 
           SizedBox(height: isMobile ? 40 : 60),
 
-          // Secondary testimonials grid
-          _buildSecondaryTestimonials(isMobile),
+          // Main auto-scrolling testimonials
+          _buildAutoScrollingTestimonials(isMobile),
+
+          SizedBox(height: isMobile ? 30 : 40),
+
+          // Page indicators
+          _buildPageIndicators(),
 
           SizedBox(height: isMobile ? 40 : 60),
 
@@ -324,20 +350,53 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
     );
   }
 
+  Widget _buildAutoScrollingTestimonials(bool isMobile) {
+    return Center(
+      child: Container(
+        constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 800),
+        height: isMobile ? 450 : 400,
+        child: PageView.builder(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          itemCount: testimonials.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 40),
+              child: _buildMainTestimonial(testimonials[index], isMobile),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   Widget _buildPageIndicators() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(testimonials.length, (index) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: _currentIndex == index ? 24 : 8,
-          height: 8,
-          decoration: BoxDecoration(
-            color: _currentIndex == index
-                ? AppColors.primary
-                : AppColors.primary.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(4),
+        return GestureDetector(
+          onTap: () {
+            _pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            width: _currentIndex == index ? 24 : 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: _currentIndex == index
+                  ? AppColors.primary
+                  : AppColors.primary.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(4),
+            ),
           ),
         );
       }),

@@ -473,7 +473,7 @@ class _PricingSectionState extends State<PricingSection>
                 ),
               ),
               child: Text(
-                animalCount > 0 ? 'Start Free Trial' : 'Enter Animal Count',
+                animalCount > 0 ? 'Ger started' : 'Enter Animal Count',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -801,7 +801,7 @@ class _PricingSectionState extends State<PricingSection>
                             ),
                           ),
                           child: Text(
-                            'Start Free Trial',
+                            'Get started',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

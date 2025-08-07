@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../constants/app_colors.dart';
+import '../services/email_service.dart';
 
 class ContactSection extends StatefulWidget {
   const ContactSection({super.key});
@@ -176,8 +179,8 @@ class _ContactSectionState extends State<ContactSection>
               child: _buildContactOption(
                 Icons.phone,
                 'Call Us',
-                '+1 (555) 123-FARM',
-                'Most Popular',
+                '+254 757 439 886',
+                'phone',
                 AppColors.primary,
               ),
             ),
@@ -186,9 +189,9 @@ class _ContactSectionState extends State<ContactSection>
               child: _buildContactOption(
                 Icons.message,
                 'Text/SMS',
-                '+1 (555) 123-FARM',
-                'Quick Questions',
-                AppColors.accent,
+                '+254 757 439 886',
+                'phone',
+                AppColors.primary,
               ),
             ),
           ],
@@ -200,9 +203,9 @@ class _ContactSectionState extends State<ContactSection>
               child: _buildContactOption(
                 Icons.email,
                 'Email',
-                'farmers@herdsman.com',
-                'Detailed Inquiries',
-                AppColors.success,
+                'sirmakipkurui20@gmail.com',
+                'email',
+                AppColors.primary,
               ),
             ),
             const SizedBox(width: 12),
@@ -210,9 +213,9 @@ class _ContactSectionState extends State<ContactSection>
               child: _buildContactOption(
                 Icons.chat,
                 'WhatsApp',
-                '+1 (555) 123-FARM',
-                'Chat Support',
-                Colors.green,
+                '+254 757 439 886',
+                'whatsapp',
+                AppColors.primary,
               ),
             ),
           ],
@@ -228,8 +231,8 @@ class _ContactSectionState extends State<ContactSection>
           child: _buildContactOption(
             Icons.phone,
             'Call Us',
-            '+1 (555) 123-FARM',
-            'Most Popular',
+            '+254 757 439 886',
+            'phone',
             AppColors.primary,
           ),
         ),
@@ -238,9 +241,9 @@ class _ContactSectionState extends State<ContactSection>
           child: _buildContactOption(
             Icons.message,
             'Text/SMS',
-            '+1 (555) 123-FARM',
-            'Quick Questions',
-            AppColors.accent,
+            '+254 757 439 886',
+            'phone',
+            AppColors.primary,
           ),
         ),
         const SizedBox(width: 16),
@@ -248,9 +251,9 @@ class _ContactSectionState extends State<ContactSection>
           child: _buildContactOption(
             Icons.email,
             'Email',
-            'farmers@herdsman.com',
-            'Detailed Inquiries',
-            AppColors.success,
+            'sirmakipkurui20@gmail.com',
+            'email',
+            AppColors.primary,
           ),
         ),
         const SizedBox(width: 16),
@@ -258,9 +261,9 @@ class _ContactSectionState extends State<ContactSection>
           child: _buildContactOption(
             Icons.chat,
             'WhatsApp',
-            '+1 (555) 123-FARM',
-            'Chat Support',
-            Colors.green,
+            '+254 757 439 886',
+            'whatsapp',
+            AppColors.primary,
           ),
         ),
       ],
@@ -271,14 +274,24 @@ class _ContactSectionState extends State<ContactSection>
     IconData icon,
     String title,
     String contact,
-    String subtitle,
+    String actionType,
     Color color,
   ) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          // Handle contact method selection
+          switch (actionType) {
+            case 'phone':
+              _copyToClipboard(contact, 'Phone number');
+              break;
+            case 'email':
+              _copyToClipboard(contact, 'Email address');
+              break;
+            case 'whatsapp':
+              _openWhatsApp(contact);
+              break;
+          }
         },
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -310,7 +323,7 @@ class _ContactSectionState extends State<ContactSection>
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 4),
+              const SizedBox(height: 8),
 
               Text(
                 contact,
@@ -318,17 +331,6 @@ class _ContactSectionState extends State<ContactSection>
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: color,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 4),
-
-              Text(
-                subtitle,
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: AppColors.textSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -617,18 +619,9 @@ class _ContactSectionState extends State<ContactSection>
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // Handle form submission
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text(
-                          'Message sent! We\'ll respond within 2 hours.',
-                        ),
-                        backgroundColor: AppColors.success,
-                      ),
-                    );
-                    _clearForm();
+                    await _submitForm();
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -907,6 +900,95 @@ class _ContactSectionState extends State<ContactSection>
         ],
       ),
     );
+  }
+
+  // Helper methods for contact actions
+  void _copyToClipboard(String text, String type) {
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$type copied to clipboard!'),
+        backgroundColor: AppColors.success,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _openWhatsApp(String phoneNumber) async {
+    final whatsappUrl =
+        'https://wa.me/${phoneNumber.replaceAll(RegExp(r'[^\d+]'), '')}';
+    if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
+      await launchUrl(Uri.parse(whatsappUrl));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not open WhatsApp'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _submitForm() async {
+    try {
+      // Show loading indicator
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            children: [
+              SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+              SizedBox(width: 16),
+              Text('Sending message...'),
+            ],
+          ),
+          duration: Duration(seconds: 30),
+        ),
+      );
+
+      // Send email using EmailService
+      final success = await EmailService.sendContactEmail(
+        name: _nameController.text,
+        email: _emailController.text,
+        phone: _phoneController.text,
+        farmSize: _farmSizeController.text,
+        contactReason: _selectedContactReason,
+        timePreference: _selectedTimePreference,
+        message: _messageController.text,
+      );
+
+      // Clear the loading snackbar
+      ScaffoldMessenger.of(context).clearSnackBars();
+
+      if (success) {
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Message sent! We\'ll respond within 2 hours.'),
+            backgroundColor: AppColors.success,
+            duration: Duration(seconds: 4),
+          ),
+        );
+        _clearForm();
+      } else {
+        throw Exception('Failed to send email');
+      }
+    } catch (e) {
+      // Clear the loading snackbar
+      ScaffoldMessenger.of(context).clearSnackBars();
+
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to send message: ${e.toString()}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    }
   }
 
   void _clearForm() {
