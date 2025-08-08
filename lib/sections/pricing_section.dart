@@ -301,45 +301,48 @@ class _PricingSectionState extends State<PricingSection>
           const SizedBox(height: 16),
 
           // Animal count input field
-          TextFormField(
-            controller: _animalCountController,
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Enter number of animals',
-              hintStyle: TextStyle(
-                fontSize: 16,
-                color: AppColors.textSecondary,
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 300),
+            child: TextFormField(
+              controller: _animalCountController,
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                  color: AppColors.primary.withValues(alpha: 0.3),
-                  width: 2,
+              decoration: InputDecoration(
+                hintText: 'Enter number of animals',
+                hintStyle: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.textSecondary,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                    width: 2,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: AppColors.primary,
+                    width: 2,
+                  ),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
                 ),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: AppColors.primary,
-                  width: 2,
-                ),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 16,
-              ),
+              onChanged: (value) {
+                setState(() {
+                  // Trigger rebuild to update price
+                });
+              },
             ),
-            onChanged: (value) {
-              setState(() {
-                // Trigger rebuild to update price
-              });
-            },
           ),
 
           const SizedBox(height: 16),

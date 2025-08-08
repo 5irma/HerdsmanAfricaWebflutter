@@ -271,7 +271,7 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
 
   Widget _buildBottomCTA(BuildContext context, bool isMobile) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: EdgeInsets.all(isMobile ? 24 : 32),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -283,21 +283,40 @@ class _HowItWorksSectionState extends State<HowItWorksSection>
       ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.trending_up, color: AppColors.primary, size: 24),
-              const SizedBox(width: 12),
-              Text(
-                'A data driven farm maximizes every animals potential',
-                style: TextStyle(
-                  fontSize: isMobile ? 18 : 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+          isMobile
+              ? Column(
+                  children: [
+                    Icon(Icons.trending_up, color: AppColors.primary, size: 24),
+                    const SizedBox(height: 12),
+                    Text(
+                      'A data driven farm maximizes every animals potential',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.trending_up, color: AppColors.primary, size: 24),
+                    const SizedBox(width: 12),
+                    Flexible(
+                      child: Text(
+                        'A data driven farm maximizes every animals potential',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
 
           const SizedBox(height: 16),
 

@@ -244,17 +244,18 @@ class _SolutionsSectionState extends State<SolutionsSection>
 
   Widget _buildProblemSection(Map<String, dynamic> solution, bool isMobile) {
     return Column(
-      crossAxisAlignment:
-          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: isMobile
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment:
-              isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
+        Wrap(
+          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.1),
+                color: Colors.red.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -279,10 +280,10 @@ class _SolutionsSectionState extends State<SolutionsSection>
         Text(
           solution['problem'] as String,
           style: TextStyle(
-            fontSize: isMobile ? 20 : 24,
+            fontSize: isMobile ? 18 : 22,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
-            height: 1.2,
+            height: 1.3,
           ),
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
         ),
@@ -290,7 +291,7 @@ class _SolutionsSectionState extends State<SolutionsSection>
         Text(
           solution['description'] as String,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 15,
             color: AppColors.textSecondary,
             height: 1.5,
           ),
@@ -302,17 +303,18 @@ class _SolutionsSectionState extends State<SolutionsSection>
 
   Widget _buildSolutionSection(Map<String, dynamic> solution, bool isMobile) {
     return Column(
-      crossAxisAlignment:
-          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: isMobile
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment:
-              isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
+        Wrap(
+          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -346,8 +348,9 @@ class _SolutionsSectionState extends State<SolutionsSection>
         ),
         const SizedBox(height: 16),
         Column(
-          crossAxisAlignment:
-              isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+          crossAxisAlignment: isMobile
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.start,
           children: (solution['benefits'] as List<String>).map((benefit) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),

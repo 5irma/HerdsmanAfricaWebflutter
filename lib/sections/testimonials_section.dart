@@ -196,8 +196,8 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
     bool isMobile,
   ) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: isMobile ? 0 : 20),
-      padding: const EdgeInsets.all(32),
+      margin: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 16),
+      padding: EdgeInsets.all(isMobile ? 20 : 32),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -210,167 +210,299 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           // Quote
           Icon(
             Icons.format_quote,
-            size: 40,
+            size: isMobile ? 32 : 40,
             color: AppColors.primary.withValues(alpha: 0.3),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: isMobile ? 16 : 20),
 
-          Text(
-            testimonial['quote'] as String,
-            style: TextStyle(
-              fontSize: isMobile ? 18 : 22,
-              color: AppColors.textPrimary,
-              height: 1.6,
-              fontStyle: FontStyle.italic,
+          Flexible(
+            child: Text(
+              testimonial['quote'] as String,
+              style: TextStyle(
+                fontSize: isMobile ? 16 : 20,
+                color: AppColors.textPrimary,
+                height: 1.5,
+                fontStyle: FontStyle.italic,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: isMobile ? 6 : 4,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
           ),
 
-          const SizedBox(height: 32),
+          SizedBox(height: isMobile ? 20 : 32),
 
           // Farmer info
-          Row(
-            children: [
-              // Avatar
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Icon(
-                  testimonial['avatar'] as IconData,
-                  color: AppColors.primary,
-                  size: 30,
-                ),
-              ),
-
-              const SizedBox(width: 16),
-
-              // Details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          testimonial['name'] as String,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        if (testimonial['hasVideo'] as bool) ...[
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: const Text(
-                              'VIDEO',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    Text(
-                      testimonial['title'] as String,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    Text(
-                      '${testimonial['farmSize']} • ${testimonial['location']}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppColors.textLight,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Result badge
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.success.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.success.withValues(alpha: 0.3),
-                    width: 1,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    const Icon(
-                      Icons.trending_up,
-                      color: AppColors.success,
-                      size: 16,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      testimonial['result'] as String,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.success,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+          isMobile
+              ? _buildMobileFarmerInfo(testimonial)
+              : _buildDesktopFarmerInfo(testimonial),
         ],
       ),
     );
   }
 
-  Widget _buildAutoScrollingTestimonials(bool isMobile) {
-    return Center(
-      child: Container(
-        constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 800),
-        height: isMobile ? 450 : 400,
-        child: PageView.builder(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          itemCount: testimonials.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 40),
-              child: _buildMainTestimonial(testimonials[index], isMobile),
-            );
-          },
+  Widget _buildMobileFarmerInfo(Map<String, dynamic> testimonial) {
+    return Column(
+      children: [
+        // Avatar and name
+        Row(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Icon(
+                testimonial['avatar'] as IconData,
+                color: AppColors.primary,
+                size: 25,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          testimonial['name'] as String,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (testimonial['hasVideo'] as bool) ...[
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          child: const Text(
+                            'VIDEO',
+                            style: TextStyle(
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  Text(
+                    testimonial['title'] as String,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textSecondary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    '${testimonial['farmSize']} • ${testimonial['location']}',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.textLight,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ),
+        const SizedBox(height: 12),
+        // Result badge
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.success.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: AppColors.success.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.trending_up, color: AppColors.success, size: 14),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  testimonial['result'] as String,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.success,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopFarmerInfo(Map<String, dynamic> testimonial) {
+    return Row(
+      children: [
+        // Avatar
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Icon(
+            testimonial['avatar'] as IconData,
+            color: AppColors.primary,
+            size: 30,
+          ),
+        ),
+
+        const SizedBox(width: 16),
+
+        // Details
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      testimonial['name'] as String,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (testimonial['hasVideo'] as bool) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        'VIDEO',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              Text(
+                testimonial['title'] as String,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.textSecondary,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                '${testimonial['farmSize']} • ${testimonial['location']}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.textLight,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+
+        // Result badge
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.success.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: AppColors.success.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: Column(
+            children: [
+              const Icon(Icons.trending_up, color: AppColors.success, size: 16),
+              const SizedBox(height: 4),
+              Text(
+                testimonial['result'] as String,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.success,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAutoScrollingTestimonials(bool isMobile) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? constraints.maxWidth : 800,
+            maxHeight: isMobile ? 500 : 450,
+          ),
+          height: isMobile ? null : 400,
+          child: PageView.builder(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            itemCount: testimonials.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 20),
+                child: _buildMainTestimonial(testimonials[index], isMobile),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 

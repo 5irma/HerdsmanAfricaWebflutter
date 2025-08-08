@@ -180,33 +180,38 @@ class _HeroSectionState extends State<HeroSection>
                 // Main headline - more compelling
                 ScaleTransition(
                   scale: _scaleAnimation,
-                  child: RichText(
-                    textAlign: isMobile ? TextAlign.center : TextAlign.left,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: isMobile ? 36 : 52,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                        height: 1.1,
-                        letterSpacing: -1.0,
-                      ),
-                      children: [
-                        const TextSpan(text: 'Track your '),
-                        TextSpan(
-                          text: 'whole herd',
-                          style: TextStyle(
-                            color: Colors.yellow[300],
-                            shadows: [
-                              Shadow(
-                                color: Colors.black.withValues(alpha: 0.3),
-                                offset: const Offset(2, 2),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: isMobile ? double.infinity : 600,
+                    ),
+                    child: RichText(
+                      textAlign: isMobile ? TextAlign.center : TextAlign.left,
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: isMobile ? 28 : 48,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          height: 1.2,
+                          letterSpacing: -0.5,
                         ),
-                        const TextSpan(text: ' on your phone'),
-                      ],
+                        children: [
+                          const TextSpan(text: 'Track your '),
+                          TextSpan(
+                            text: 'whole herd',
+                            style: TextStyle(
+                              color: Colors.yellow[300],
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withValues(alpha: 0.3),
+                                  offset: const Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const TextSpan(text: ' on your phone'),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -423,12 +428,15 @@ class _HeroSectionState extends State<HeroSection>
           opacity: _fadeAnimation,
           child: ScaleTransition(
             scale: _scaleAnimation,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: isMobile ? 350 : 550),
-              child: Stack(
-                children: [
-                  // Phone mockup with enhanced shadow
-                  Container(
+            child: Center(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: isMobile ? 400 : 550,
+                  maxWidth: isMobile ? 300 : 350,
+                ),
+                child: AspectRatio(
+                  aspectRatio: isMobile ? 0.75 : 0.65,
+                  child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
@@ -447,8 +455,6 @@ class _HeroSectionState extends State<HeroSection>
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(25),
                       child: Container(
-                        width: isMobile ? 280 : 320,
-                        height: isMobile ? 350 : 550,
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -460,7 +466,7 @@ class _HeroSectionState extends State<HeroSection>
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -680,54 +686,57 @@ class _HeroSectionState extends State<HeroSection>
   }
 
   Widget _buildFeatureListBox(bool isMobile) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.2),
-          width: 1,
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 600),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(isMobile ? 16 : 20),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.2),
+            width: 1,
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: isMobile
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.start,
-        children: [
-          _buildFeatureItem(
-            'Track your animal health and production from birth to market',
-            isMobile,
-          ),
-          const SizedBox(height: 12),
-          _buildFeatureItem(
-            'Electronic identification of animals with microchips (ISO 11784/85 certified)',
-            isMobile,
-          ),
-          const SizedBox(height: 12),
-          _buildFeatureItem('Monitor production with visual aids', isMobile),
-          const SizedBox(height: 12),
-          _buildFeatureItem(
-            'Keep breeding records and pedigree with ease',
-            isMobile,
-          ),
-          const SizedBox(height: 12),
-          _buildFeatureItem(
-            'AI-powered analytics to uncover trends in your farm data',
-            isMobile,
-          ),
-        ],
+        child: Column(
+          crossAxisAlignment: isMobile
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.start,
+          children: [
+            _buildFeatureItem(
+              'Track your animal health and production from birth to market',
+              isMobile,
+            ),
+            const SizedBox(height: 12),
+            _buildFeatureItem(
+              'Electronic identification of animals with microchips (ISO 11784/85 certified)',
+              isMobile,
+            ),
+            const SizedBox(height: 12),
+            _buildFeatureItem('Monitor production with visual aids', isMobile),
+            const SizedBox(height: 12),
+            _buildFeatureItem(
+              'Keep breeding records and pedigree with ease',
+              isMobile,
+            ),
+            const SizedBox(height: 12),
+            _buildFeatureItem(
+              'AI-powered analytics to uncover trends in your farm data',
+              isMobile,
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildFeatureItem(String text, bool isMobile) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 4),
+          margin: const EdgeInsets.only(top: 6),
           width: 6,
           height: 6,
           decoration: BoxDecoration(
@@ -740,12 +749,14 @@ class _HeroSectionState extends State<HeroSection>
           child: Text(
             text,
             style: TextStyle(
-              fontSize: isMobile ? 16 : 18,
+              fontSize: isMobile ? 14 : 16,
               color: Colors.white.withValues(alpha: 0.95),
               height: 1.4,
               fontWeight: FontWeight.w400,
             ),
             textAlign: isMobile ? TextAlign.center : TextAlign.left,
+            softWrap: true,
+            overflow: TextOverflow.visible,
           ),
         ),
       ],

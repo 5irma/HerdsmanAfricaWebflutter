@@ -14,7 +14,7 @@ class EmailService {
 
   // Option 3: Webhook.site (instant testing - no signup required)
   static const String _webhookUrl =
-      'https://webhook.site/YOUR_ACTUAL_WEBHOOK_ID'; // Replace YOUR_ACTUAL_WEBHOOK_ID with the ID from webhook.site
+      'https://webhook.site/bde8700e-d680-4194-b1a1-fbc90678885f'; // Your webhook.site URL
 
   static Future<bool> sendContactEmail({
     required String name,
@@ -62,6 +62,7 @@ class EmailService {
       );
     } catch (e) {
       print('Error sending email: $e');
+      print('Error type: ${e.runtimeType}');
       return false;
     }
   }
@@ -132,24 +133,44 @@ class EmailService {
     required String timePreference,
     required String message,
   }) async {
-    final response = await http.post(
-      Uri.parse(_webhookUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
+    try {
+      print('🚀 Sending webhook to: $_webhookUrl');
+
+      // Simple payload that webhook.site can easily handle
+      final payload = {
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'farm_size': farmSize,
+        'contact_reason': contactReason,
+        'time_preference': timePreference,
+        'message': message,
+        'notification_email': 'sirmakipkurui20@gmail.com',
         'timestamp': DateTime.now().toIso8601String(),
-        'type': 'contact_form_submission',
-        'data': {
-          'name': name,
-          'email': email,
-          'phone': phone,
-          'farm_size': farmSize,
-          'contact_reason': contactReason,
-          'time_preference': timePreference,
-          'message': message,
-          'notification_email': 'sirmakipkurui20@gmail.com',
-        },
-      }),
-    );
-    return response.statusCode == 200;
+      };
+
+      print('📦 Payload: ${jsonEncode(payload)}');
+
+      final response = await http
+          .post(
+            Uri.parse(_webhookUrl),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: jsonEncode(payload),
+          )
+          .timeout(const Duration(seconds: 10));
+
+      print('✅ Response status: ${response.statusCode}');
+      print('📄 Response body: ${response.body}');
+
+      // webhook.site returns 200 for successful requests
+      return response.statusCode >= 200 && response.statusCode < 300;
+    } catch (e) {
+      print('❌ Webhook error: $e');
+      print('❌ Error type: ${e.runtimeType}');
+      return false;
+    }
   }
 }

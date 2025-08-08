@@ -136,7 +136,8 @@ class _ContactSectionState extends State<ContactSection>
 
   Widget _buildContactOptions(bool isMobile) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      width: double.infinity,
+      padding: EdgeInsets.all(isMobile ? 20 : 24),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -153,14 +154,14 @@ class _ContactSectionState extends State<ContactSection>
           Text(
             'Choose Your Preferred Contact Method',
             style: TextStyle(
-              fontSize: isMobile ? 18 : 20,
+              fontSize: isMobile ? 16 : 20,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
             ),
             textAlign: TextAlign.center,
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: isMobile ? 20 : 24),
 
           isMobile
               ? _buildMobileContactOptions()
@@ -540,7 +541,8 @@ class _ContactSectionState extends State<ContactSection>
 
   Widget _buildContactForm(bool isMobile) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      width: double.infinity,
+      padding: EdgeInsets.all(isMobile ? 24 : 32),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -560,7 +562,7 @@ class _ContactSectionState extends State<ContactSection>
             Text(
               'Send Us a Message',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: isMobile ? 20 : 24,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
               ),
@@ -570,10 +572,13 @@ class _ContactSectionState extends State<ContactSection>
 
             Text(
               'We\'ll get back to you within 2 hours during business hours',
-              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+              style: TextStyle(
+                fontSize: isMobile ? 13 : 14,
+                color: AppColors.textSecondary,
+              ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: isMobile ? 20 : 24),
 
             // Contact reason dropdown
             _buildDropdownField(
@@ -609,10 +614,10 @@ class _ContactSectionState extends State<ContactSection>
             _buildLargeTextField(
               'Tell us about your farm and what you need help with',
               _messageController,
-              4,
+              isMobile ? 3 : 4,
             ),
 
-            const SizedBox(height: 32),
+            SizedBox(height: isMobile ? 24 : 32),
 
             // Submit button
             SizedBox(
