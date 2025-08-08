@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_navbar.dart';
+import '../widgets/lazy_section.dart';
+import '../widgets/performance_overlay.dart';
 import '../sections/hero_section.dart';
 import '../sections/how_it_works_section.dart';
 import '../sections/who_its_for_section.dart';
@@ -63,43 +65,90 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomNavbar(),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: [
-            Container(key: _sectionKeys['hero'], child: const HeroSection()),
-            Container(
-              key: _sectionKeys['how-it-works'],
-              child: const HowItWorksSection(),
-            ),
-            Container(
-              key: _sectionKeys['who-its-for'],
-              child: const WhoItsForSection(),
-            ),
-            Container(
-              key: _sectionKeys['solutions'],
-              child: const SolutionsSection(),
-            ),
-            Container(
-              key: _sectionKeys['testimonials'],
-              child: const TestimonialsSection(),
-            ),
-            Container(
-              key: _sectionKeys['pricing'],
-              child: const PricingSection(),
-            ),
-            Container(
-              key: _sectionKeys['download'],
-              child: const DownloadAppSection(),
-            ),
-            Container(key: _sectionKeys['faqs'], child: const FaqSection()),
-            Container(
-              key: _sectionKeys['contact'],
-              child: const ContactSection(),
-            ),
-          ],
+    return PerformanceOverlay(
+      showOverlay:
+          false, // Set to true during development to monitor performance
+      child: Scaffold(
+        appBar: const CustomNavbar(),
+        body: SingleChildScrollView(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
+          // Performance optimizations
+          cacheExtent: 1000.0, // Cache more content for smoother scrolling
+          child: Column(
+            children: [
+              // Hero section loads immediately (above the fold)
+              Container(key: _sectionKeys['hero'], child: const HeroSection()),
+
+              // All other sections use lazy loading with optimized thresholds
+              Container(
+                key: _sectionKeys['how-it-works'],
+                child: LazySection(
+                  sectionName: 'how-it-works',
+                  threshold: 400.0, // Load earlier for smoother experience
+                  builder: () => const HowItWorksSection(),
+                ),
+              ),
+              Container(
+                key: _sectionKeys['who-its-for'],
+                child: LazySection(
+                  sectionName: 'who-its-for',
+                  threshold: 400.0,
+                  builder: () => const WhoItsForSection(),
+                ),
+              ),
+              Container(
+                key: _sectionKeys['solutions'],
+                child: LazySection(
+                  sectionName: 'solutions',
+                  threshold: 400.0,
+                  builder: () => const SolutionsSection(),
+                ),
+              ),
+              Container(
+                key: _sectionKeys['testimonials'],
+                child: LazySection(
+                  sectionName: 'testimonials',
+                  threshold: 400.0,
+                  builder: () => const TestimonialsSection(),
+                ),
+              ),
+              Container(
+                key: _sectionKeys['pricing'],
+                child: LazySection(
+                  sectionName: 'pricing',
+                  threshold: 400.0,
+                  builder: () => const PricingSection(),
+                ),
+              ),
+              Container(
+                key: _sectionKeys['download'],
+                child: LazySection(
+                  sectionName: 'download',
+                  threshold: 400.0,
+                  builder: () => const DownloadAppSection(),
+                ),
+              ),
+              Container(
+                key: _sectionKeys['faqs'],
+                child: LazySection(
+                  sectionName: 'faqs',
+                  threshold: 400.0,
+                  builder: () => const FaqSection(),
+                ),
+              ),
+              Container(
+                key: _sectionKeys['contact'],
+                child: LazySection(
+                  sectionName: 'contact',
+                  threshold: 400.0,
+                  builder: () => const ContactSection(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
