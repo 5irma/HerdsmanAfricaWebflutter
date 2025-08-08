@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
         // Reduce animations for better performance
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: {
-            TargetPlatform.web: FadeUpwardsPageTransitionsBuilder(),
             TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
             TargetPlatform.macOS: FadeUpwardsPageTransitionsBuilder(),
             TargetPlatform.linux: FadeUpwardsPageTransitionsBuilder(),
